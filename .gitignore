@@ -1,7 +1,5 @@
 # Исключаем папку /bitrix
-bitrix
 /bitrix
-/bitrix/*
 
 # исключаем логи
 /local/php_interface/logs/
