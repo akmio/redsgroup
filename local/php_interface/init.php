@@ -48,9 +48,19 @@ function bxModifySaleMails($orderID, &$eventName, &$arFields)
       ['ID' => $arProduct],
       false,
       false,
-      ['NAME', 'DETAIL_PAGE_URL']
+      ['NAME', 'DETAIL_PAGE_URL', 'PRICE_1', 'SCALED_PRICE_1','QWERTY']
    );
    while ($arViewElem = $resViewElem->GetNext()) {
       $arFields['VIEWED_PRODUCTS'] .= '<a href ="'.$_SERVER['SERVER_NAME'].$arViewElem['DETAIL_PAGE_URL'].'">'.$arViewElem['NAME'].'</a><br>';
+   }
+}
+
+//автозаполнение св-ва  "Стоит меньше тысячи" работает только с товарами без ТП
+AddEventHandler("catalog", "OnBeforePriceAdd", "OnBeforePriceAddHandler");
+
+function OnBeforePriceAddHandler(&$arFields)
+{
+   if ($arFields['PRICE'] < 1000) {
+      CIBlockElement::SetPropertyValuesEx($arFields['PRODUCT_ID'], 2, ['PRICE_MENEE' => 18]);
    }
 }

@@ -270,6 +270,17 @@ else
 		}
 		//endregion
 
+		?><span>Сортировать по: </span>
+		<a href="<?echo $APPLICATION->GetCurPageParam('sort=price_menee',[], false);?>">Меньше тысячи</a> | 
+		<a href="<?echo $APPLICATION->GetCurPageParam('',['sort'], false);?>">Cброс сортировки</a>
+		<?
+
+		if ($_GET["sort"] == "price_menee")
+		{
+			$arParams['ELEMENT_SORT_FIELD'] = 'property_PRICE_MENEE';
+			$arParams['ELEMENT_SORT_ORDER'] = 'DESC';
+		}
+
 	 	 $intSectionID = $APPLICATION->IncludeComponent(
 					"bitrix:catalog.section",
 					"bootstrap_v4", array(
