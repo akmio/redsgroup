@@ -34,6 +34,15 @@ global $trendFilter;
 $trendFilter = array('PROPERTY_TREND' => '4');
 ?>
 
+<?$APPLICATION->IncludeComponent(
+	"dv:elem.list",
+	"",
+	Array(
+		"IBLOCK_ID" => "2",
+		"IBLOCK_TYPE" => "catalog"
+	)
+);?>
+
 <h2>Тренды сезона</h2>
 <?$APPLICATION->IncludeComponent(
 	"bitrix:catalog.section",

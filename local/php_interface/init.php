@@ -64,3 +64,36 @@ function OnBeforePriceAddHandler(&$arFields)
       CIBlockElement::SetPropertyValuesEx($arFields['PRODUCT_ID'], 2, ['PRICE_MENEE' => 18]);
    }
 }
+
+//Отправка письма на почту если был удален товар с большим кол-вом голосов
+AddEventHandler("iblock", "OnBeforeIBlockElementDelete", "OnBeforeIBlockElementDeleteHandler");
+
+function OnBeforeIBlockElementDeleteHandler($id){
+
+   $max = '';
+   $key = '';
+   $resElemAll = CIBlockElement::GetList(
+      ['ID' => 'ASC'],
+      ['IBLOCK_ID' => 2],
+      false,
+      false,
+      ['IBLOCK_ID', 'ID', 'NAME', 'PROPERTY_VOTE',]
+   );
+   while ($arElemAll = $resElemAll->GetNext()) {
+
+      if ($arElemAll['PROPERTY_VOTE_VALUE'] > $max) {
+         $max = $arElemAll['PROPERTY_VOTE_VALUE'];
+         $key = $arElemAll['ID'];
+      }
+      $arAll[$arElemAll['ID']] = $arElemAll;
+   }
+
+   if ($key == $id) {
+      $arProp = [
+         'ID' => $arAll[$id]['ID'],
+         'NAME' => $arAll[$id]['NAME'],
+         'VOTE' => $arAll[$id]['PROPERTY_VOTE_VALUE'],
+      ];
+      CEvent::Send('DELET_ELEMENT', 's1', $arProp);
+   }
+}
